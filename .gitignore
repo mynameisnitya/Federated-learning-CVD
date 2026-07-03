@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# TensorFlow models
+*.keras
+*.h5
+
+# Dataset
+datasets/*.csv
+datasets/*.zip
+datasets/*.gz
+
+# Experiment outputs
+experiments/*/models/
+experiments/*/results/
+experiments/*/result_plots/
+
+# IDE
+.vscode/
+.idea/
+
+# macOS/Linux
+.DS_Store
