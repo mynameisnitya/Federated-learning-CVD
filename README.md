@@ -2,7 +2,7 @@
 
 ## MSc Data Science Dissertation
 
-This project investigates the use of Federated Learning for cardiovascular disease prediction using simulated hospitals derived from the MIMIC-IV dataset.( Read Reproducing_Federated_Learning_Experiments.md for how to reproduce the experiments )
+This project investigates the use of Federated Learning for cardiovascular disease prediction using simulated hospitals derived from the MIMIC-IV dataset.( Read README_Reproducibility_Guide for how to reproduce the experiments and install the required environment and technologies)
 
 ## Experiments
 
