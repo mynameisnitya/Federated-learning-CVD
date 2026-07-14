@@ -1,229 +1,157 @@
 # Federated Learning for Cardiovascular Disease Prediction
 
-## Reproducibility Guide
+## Overview
 
-## 1. System Requirements
+This repository contains the implementation developed for the MSc Data Science dissertation:
 
-### Hardware
+**"A Comparative Evaluation of Federated Learning Strategies for Privacy-Preserving Cardiovascular Disease Prediction"**
 
--   CPU: Quad-core processor or better
--   RAM: Minimum 8 GB (16 GB recommended)
--   Storage: At least 5 GB free space
+The project investigates the performance of Centralised Learning, FedAvg, and FedProx under both IID and Non-IID data distributions using the Flower Federated Learning Framework.
 
-### Software
+---
 
--   Ubuntu 22.04 LTS (or compatible Linux)
--   Python 3.12
--   TensorFlow 2.x (CPU version)
--   Flower
--   NumPy
--   Pandas
--   Scikit-learn
--   Matplotlib
+## Repository Structure
 
-------------------------------------------------------------------------
+```
+datasets/                  Dataset files and client partitions
+experiments/               Individual experiment outputs
+comparison_results/        Comparative metrics and figures
+exploration_plots/         Exploratory data analysis
 
-## 2. Project Structure
-
-``` text
-federated_learning/
-│
-├── datasets/
-├── experiments/
-├── models/
-├── baseline_training.py
-├── server.py
-├── client.py
-├── evaluate.py
-├── plot_training.py
-├── compare_results.py
-├── model.py
-├── data_loader.py
-├── training_utils.py
-└── requirements.txt
+baseline_training.py       Centralised learning baseline
+server.py                  Flower server
+client.py                  Flower client
+model.py                   Neural network architecture
+data_loader.py             Dataset loading
+training_utils.py          Training utilities
+evaluate.py                Model evaluation
+compare_results.py         Performance comparison
+plot_training.py           Training visualisation
+plot_training_comparison.py Training comparison plots
+requirements.txt           Python dependencies
 ```
 
-------------------------------------------------------------------------
+---
 
-## 3. Installation
+## Requirements
 
-Clone the repository:
+- Ubuntu 22.04 LTS (or compatible Linux)
+- Python 3.12
+- TensorFlow 2.x
+- Flower
+- NumPy
+- Pandas
+- Scikit-learn
+- Matplotlib
 
-``` bash
-git clone <repository-url>
-cd federated_learning
-```
+Install the required packages using:
 
-Create a virtual environment:
-
-``` bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-Install dependencies:
-
-``` bash
+```bash
 pip install -r requirements.txt
 ```
 
-------------------------------------------------------------------------
+---
 
-## 4. Dataset Preparation
+## Dataset
 
-Place the following CSV files inside the `datasets/` directory:
+The experiments use the cardiovascular disease dataset partitioned into:
 
-``` text
-iid_train_global.csv
-iid_test_global.csv
-iid_hospital1.csv
-iid_hospital2.csv
-iid_hospital3.csv
+- IID client datasets
+- Non-IID client datasets
+- Global training and testing datasets
 
-noniid_train_global.csv
-noniid_test_global.csv
-noniid_hospital1.csv
-noniid_hospital2.csv
-noniid_hospital3.csv
+Place all dataset files inside the `datasets/` directory before running the experiments.
+
+---
+
+## Running the Experiments
+
+### Centralised Learning
+
+```bash
+python baseline_training.py
 ```
 
-The IID and Non-IID hospital datasets are partitions of the same global
-dataset. The centralised baseline uses the global training dataset,
-while the federated experiments use the hospital partitions.
+### Federated Learning
 
-------------------------------------------------------------------------
+1. Start the Flower server.
 
-## 5. Running the Experiments
-
-### Centralised Baseline
-
-``` bash
-python baseline_training.py --experiment centralised --dataset iid
-python baseline_training.py --experiment centralised --dataset noniid
+```bash
+python server.py
 ```
 
-### FedProx (Non-IID)
+2. Launch three clients in separate terminals.
 
-Terminal 1:
-
-``` bash
-python server.py --dataset noniid --strategy fedprox
+```bash
+python client.py
 ```
 
-Terminal 2:
+3. Evaluate the trained model.
 
-``` bash
-python client.py --dataset datasets/noniid_hospital1.csv
+```bash
+python evaluate.py
 ```
 
-Terminal 3:
+4. Generate comparison figures.
 
-``` bash
-python client.py --dataset datasets/noniid_hospital2.csv
-```
-
-Terminal 4:
-
-``` bash
-python client.py --dataset datasets/noniid_hospital3.csv
-```
-
-After training:
-
-``` bash
-python plot_training.py --experiment fedprox_noniid
-python evaluate.py --dataset noniid --experiment fedprox_noniid
-```
-
-### FedAvg (Non-IID)
-
-``` bash
-python server.py --dataset noniid --strategy fedavg
-```
-
-Run the three Non-IID hospital clients in separate terminals, then:
-
-``` bash
-python plot_training.py --experiment fedavg_noniid
-python evaluate.py --dataset noniid --experiment fedavg_noniid
-```
-
-### FedAvg (IID)
-
-``` bash
-python server.py --dataset iid --strategy fedavg
-```
-
-Run the three IID hospital clients in separate terminals, then:
-
-``` bash
-python plot_training.py --experiment fedavg_iid
-python evaluate.py --dataset iid --experiment fedavg_iid
-```
-
-------------------------------------------------------------------------
-
-## 6. Compare Results
-
-``` bash
+```bash
 python compare_results.py
+python plot_training_comparison.py
 ```
 
-------------------------------------------------------------------------
+---
 
-## 7. Outputs
+## Experimental Configuration
 
-Each experiment generates:
+| Parameter | Value |
+|-----------|-------|
+| Clients | 3 |
+| Random Seed | 42 |
+| Local Epochs | 1 |
+| Batch Size | 32 |
+| Learning Rate | 0.001 |
+| Optimiser | Adam |
+| Aggregation Methods | FedAvg, FedProx |
 
-``` text
-experiments/<experiment_name>/
+---
 
-models/
-    global_model.keras
+## Generated Outputs
 
-results/
-    training_history.csv
-    federated_metrics.csv
-    predictions.csv
+The implementation automatically generates:
 
-result_plots/
-    training_accuracy.png
-    training_loss.png
-    training_curves.png
-    confusion_matrix.png
-    roc_curve.png
-    precision_recall_curve.png
-    metrics_bar_chart.png
-    probability_distribution.png
-```
+- Training accuracy and loss curves
+- Classification metrics
+- Accuracy, Precision, Recall, F1-score and ROC-AUC comparisons
+- Comparative performance tables
+- Experimental summary reports
 
-------------------------------------------------------------------------
+Outputs are stored within the `experiments/` and `comparison_results/` directories.
 
-## 8. Approximate Runtime
+---
 
-  Experiment          Approximate Time
-  ----------------- ------------------
-  Centralised             2--5 minutes
-  FedAvg IID             5--10 minutes
-  FedAvg Non-IID         5--10 minutes
-  FedProx Non-IID        5--10 minutes
+## Reproducibility
 
-Times depend on hardware.
+All experiments were executed using identical:
 
-------------------------------------------------------------------------
+- Neural network architecture
+- Hyperparameters
+- Optimisation settings
+- Train/test split
+- Random seed (42)
 
-## 9. Reproducibility
+The only experimental variables are:
 
--   Random seed fixed to 42.
--   Identical neural network architecture across all experiments.
--   Same optimiser, learning rate, batch size, and local epochs.
--   Same global train/test split for all experiments.
--   Only the client partitioning strategy (IID vs Non-IID) and
-    aggregation algorithm (FedAvg vs FedProx) differ.
+- Data partitioning strategy (IID vs Non-IID)
+- Federated aggregation algorithm (FedAvg vs FedProx)
 
-------------------------------------------------------------------------
+---
 
-## 10. Citation
+## Author
 
-If using this implementation in academic work, please cite the
-accompanying MSc dissertation.
+**Nitya Puspaceno**
+
+MSc Data Science
+
+Nottingham Trent University
+
+Academic Year: 2025–2026
