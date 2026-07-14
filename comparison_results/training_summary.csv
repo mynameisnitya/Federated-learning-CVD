@@ -1,0 +1,6 @@
+Experiment,Final Loss,Final Accuracy
+Centralised (IID),0.3418,0.8636
+Centralised (Non-IID),0.3418,0.8636
+FedAvg (IID),0.3368,0.8675
+FedAvg (Non-IID),0.3568,0.8575
+FedProx (Non-IID),0.3693,0.8571
